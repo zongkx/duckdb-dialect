@@ -5,6 +5,20 @@ import org.hibernate.dialect.PostgreSQL10Dialect;
 import java.util.List;
 
 public class DuckDBDialect extends PostgreSQL10Dialect {
+
+    /**
+     * duckdb varchar 没有长度,需要把varchar注册成text
+     * org.hibernate.tool.schema.internal.AbstractSchemaMigrator#migrateTable(org.hibernate.mapping.Table, org.hibernate.tool.schema.extract.spi.TableInformation, org.hibernate.dialect.Dialect, org.hibernate.boot.Metadata, org.hibernate.engine.jdbc.internal.Formatter, org.hibernate.tool.schema.spi.ExecutionOptions, org.hibernate.boot.model.relational.SqlStringGenerationContext, org.hibernate.tool.schema.internal.exec.GenerationTarget...)
+     * <p>
+     * [https://duckdb.org/docs/sql/data_types/text#specifying-a-length-limit]
+     */
+    @Override
+    protected void registerColumnTypes(TypeContributions typeContributions, ServiceRegistry serviceRegistry) {
+        super.registerColumnTypes(typeContributions, serviceRegistry);
+        final DdlTypeRegistry ddlTypeRegistry = typeContributions.getTypeConfiguration().getDdlTypeRegistry();
+        ddlTypeRegistry.addDescriptor(new DdlTypeImpl(VARCHAR, "text", this));
+
+    }
     /**
      * duckdb pg_sequences
      *
