@@ -26,7 +26,7 @@ void aaaa() {
 ```
 
 ## question
-由于duckdb varchar 的元数据没有长度,所以存在 alter兼容性问题,需要将 varchar注册为 text 但是 6.5.3.Final 版本存在bug,无法跳过 alter,实际上不影响
+由于duckdb varchar 的元数据没有长度,需要将 varchar注册为 text 
 ```
     @Override
     protected void registerColumnTypes(TypeContributions typeContributions, ServiceRegistry serviceRegistry) {
@@ -37,7 +37,7 @@ void aaaa() {
 
 ```
 
-
+ 但是 6.5.3.Final 版本存在bug,导致执行了额外的alter ddl,无法跳过 ,实际上不影响
 
 org.hibernate.tool.schema.internal.ColumnDefinitions#hasMatchingLength
 
