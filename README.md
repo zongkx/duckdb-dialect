@@ -27,6 +27,10 @@ void aaaa() {
 
 ## question
 由于duckdb varchar 的元数据没有长度,需要将 varchar注册为 text 
+
+`Specifying the length for the VARCHAR, STRING, and TEXT types is not required and has no effect on the system. Specifying the length will not improve performance or reduce storage space of the strings in the database. These variants variant is supported for compatibility reasons with other systems that do require a length to be specified for strings.`
+
+
 ```
     @Override
     protected void registerColumnTypes(TypeContributions typeContributions, ServiceRegistry serviceRegistry) {
