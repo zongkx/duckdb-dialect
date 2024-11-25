@@ -24,3 +24,32 @@ void aaaa() {
     }
 }
 ```
+
+## question
+由于duckdb varchar 的元数据没有长度,所以存在 alter兼容性问题,需要将 varchar注册为 text 但是 6.5.3.Final 版本存在bug,无法跳过 alter,实际上不影响
+```
+    @Override
+    protected void registerColumnTypes(TypeContributions typeContributions, ServiceRegistry serviceRegistry) {
+        super.registerColumnTypes(typeContributions, serviceRegistry);
+        final DdlTypeRegistry ddlTypeRegistry = typeContributions.getTypeConfiguration().getDdlTypeRegistry();
+        ddlTypeRegistry.addDescriptor(new DdlTypeImpl(VARCHAR, "text", this));
+    }
+
+```
+
+
+
+org.hibernate.tool.schema.internal.ColumnDefinitions#hasMatchingLength
+
+
+
+6.6.2.Finale 版本修复了
+```
+        if ( !column.getSqlType( metadata ).contains("(") ) {
+			// the DDL type does not explicitly specify a length,
+			// and so we do not require an exact match
+			return true;
+		}
+```
+
+
