@@ -56,6 +56,8 @@ org.hibernate.tool.schema.internal.ColumnDefinitions#hasMatchingLength
 		}
 ```
 ##  分页问题
+
+参考 [openGauss](https://gitee.com/opengauss/openGauss-connector-jdbc/issues/I79EMP)
 springboot3 之后的hibernate 版本   内置的 PostgreSQLDialect 中，会调用 PostgreSQLSqlAstTranslator 。PostgreSQLSqlAstTranslator 中的方法是支持更改为传统的 limit Offset 语法形式
 ```
 @Override
