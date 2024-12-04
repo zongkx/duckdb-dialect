@@ -19,6 +19,11 @@ public class DuckDBDialect extends PostgreSQL10Dialect {
         ddlTypeRegistry.addDescriptor(new DdlTypeImpl(VARCHAR, "text", this));
 
     }
+   //解决分页问题 总是避免使用 FETCH子句   在springboot3 版本中, 如果继承了 org.hibernate.dialect.PostgreSQLDialect  则会由于开启fetch子句导致 分页查询异常
+    @Override
+    public boolean supportsFetchClause(FetchClauseType type) {
+        return false;
+    }
     /**
      * duckdb pg_sequences
      *
