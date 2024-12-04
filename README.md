@@ -55,5 +55,28 @@ org.hibernate.tool.schema.internal.ColumnDefinitions#hasMatchingLength
 			return true;
 		}
 ```
+##  分页问题
+springboot3 之后的hibernate 版本   内置的 PostgreSQLDialect 中，会调用 PostgreSQLSqlAstTranslator 。PostgreSQLSqlAstTranslator 中的方法是支持更改为传统的 limit Offset 语法形式
+```
+@Override
+	public void visitOffsetFetchClause(QueryPart queryPart) {
+		if ( !isRowNumberingCurrentQueryPart() ) {
+			if ( getDialect().supportsFetchClause( FetchClauseType.ROWS_ONLY ) ) {
+				renderOffsetFetchClause( queryPart, true );
+			}
+			else {
+				renderLimitOffsetClause( queryPart );
+			}
+		}
+	}
+```
+实际上只需要关闭 `supportsFetchClause` 即可
+```
+  //解决分页问题 总是避免使用 FETCH子句
+    @Override
+    public boolean supportsFetchClause(FetchClauseType type) {
+        return false;
+    }
+```
 
 
